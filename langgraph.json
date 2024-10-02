@@ -3,7 +3,7 @@
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
-    "agent": "./src/enrichment_agent/graph.ts:graph"
+    "memory_graph": "./src/memory_graph/graph.ts:graph"
   },
   "env": ".env"
 }
