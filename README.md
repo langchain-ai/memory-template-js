@@ -1,50 +1,32 @@
-# LangGraph Studio Data Enrichment Template
+# LangGraph.JS Memory Service
 
-[![CI](https://github.com/langchain-ai/data-enrichment-js/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/langchain-ai/data-enrichment-js/actions/workflows/unit-tests.yml)
-[![Integration Tests](https://github.com/langchain-ai/data-enrichment-js/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/langchain-ai/data-enrichment-js/actions/workflows/integration-tests.yml)
-[![Open in - LangGraph Studio](https://img.shields.io/badge/Open_in-LangGraph_Studio-00324d.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4NS4zMzMiIGhlaWdodD0iODUuMzMzIiB2ZXJzaW9uPSIxLjAiIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTEzIDcuOGMtNi4zIDMuMS03LjEgNi4zLTYuOCAyNS43LjQgMjQuNi4zIDI0LjUgMjUuOSAyNC41QzU3LjUgNTggNTggNTcuNSA1OCAzMi4zIDU4IDcuMyA1Ni43IDYgMzIgNmMtMTIuOCAwLTE2LjEuMy0xOSAxLjhtMzcuNiAxNi42YzIuOCAyLjggMy40IDQuMiAzLjQgNy42cy0uNiA0LjgtMy40IDcuNkw0Ny4yIDQzSDE2LjhsLTMuNC0zLjRjLTQuOC00LjgtNC44LTEwLjQgMC0xNS4ybDMuNC0zLjRoMzAuNHoiLz48cGF0aCBkPSJNMTguOSAyNS42Yy0xLjEgMS4zLTEgMS43LjQgMi41LjkuNiAxLjcgMS44IDEuNyAyLjcgMCAxIC43IDIuOCAxLjYgNC4xIDEuNCAxLjkgMS40IDIuNS4zIDMuMi0xIC42LS42LjkgMS40LjkgMS41IDAgMi43LS41IDIuNy0xIDAtLjYgMS4xLS44IDIuNi0uNGwyLjYuNy0xLjgtMi45Yy01LjktOS4zLTkuNC0xMi4zLTExLjUtOS44TTM5IDI2YzAgMS4xLS45IDIuNS0yIDMuMi0yLjQgMS41LTIuNiAzLjQtLjUgNC4yLjguMyAyIDEuNyAyLjUgMy4xLjYgMS41IDEuNCAyLjMgMiAyIDEuNS0uOSAxLjItMy41LS40LTMuNS0yLjEgMC0yLjgtMi44LS44LTMuMyAxLjYtLjQgMS42LS41IDAtLjYtMS4xLS4xLTEuNS0uNi0xLjItMS42LjctMS43IDMuMy0yLjEgMy41LS41LjEuNS4yIDEuNi4zIDIuMiAwIC43LjkgMS40IDEuOSAxLjYgMi4xLjQgMi4zLTIuMy4yLTMuMi0uOC0uMy0yLTEuNy0yLjUtMy4xLTEuMS0zLTMtMy4zLTMtLjUiLz48L3N2Zz4=)](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/data-enrichment-js)
+[![CI](https://github.com/langchain-ai/memory-template-js/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/langchain-ai/memory-template-js/actions/workflows/unit-tests.yml)
+[![Integration Tests](https://github.com/langchain-ai/memory-template-js/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/langchain-ai/memory-template-js/actions/workflows/integration-tests.yml)
+[![Open in - LangGraph Studio](https://img.shields.io/badge/Open_in-LangGraph_Studio-00324d.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4NS4zMzMiIGhlaWdodD0iODUuMzMzIiB2ZXJzaW9uPSIxLjAiIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHBhdGggZD0iTTEzIDcuOGMtNi4zIDMuMS03LjEgNi4zLTYuOCAyNS43LjQgMjQuNi4zIDI0LjUgMjUuOSAyNC41QzU3LjUgNTggNTggNTcuNSA1OCAzMi4zIDU4IDcuMyA1Ni43IDYgMzIgNmMtMTIuOCAwLTE2LjEuMy0xOSAxLjhtMzcuNiAxNi42YzIuOCAyLjggMy40IDQuMiAzLjQgNy42cy0uNiA0LjgtMy40IDcuNkw0Ny4yIDQzSDE2LjhsLTMuNC0zLjRjLTQuOC00LjgtNC44LTEwLjQgMC0xNS4ybDMuNC0zLjRoMzAuNHoiLz48cGF0aCBkPSJNMTguOSAyNS42Yy0xLjEgMS4zLTEgMS43LjQgMi41LjkuNiAxLjcgMS44IDEuNyAyLjcgMCAxIC43IDIuOCAxLjYgNC4xIDEuNCAxLjkgMS40IDIuNS4zIDMuMi0xIC42LS42LjkgMS40LjkgMS41IDAgMi43LS41IDIuNy0xIDAtLjYgMS4xLS44IDIuNi0uNGwyLjYuNy0xLjgtMi45Yy01LjktOS4zLTkuNC0xMi4zLTExLjUtOS44TTM5IDI2YzAgMS4xLS45IDIuNS0yIDMuMi0yLjQgMS41LTIuNiAzLjQtLjUgNC4yLjguMyAyIDEuNyAyLjUgMy4xLjYgMS41IDEuNCAyLjMgMiAyIDEuNS0uOSAxLjItMy41LS40LTMuNS0yLjEgMC0yLjgtMi44LS44LTMuMyAxLjYtLjQgMS42LS41IDAtLjYtMS4xLS4xLTEuNS0uNi0xLjItMS42LjctMS43IDMuMy0yLjEgMy41LS41LjEuNS4yIDEuNi4zIDIuMiAwIC43LjkgMS40IDEuOSAxLjYgMi4xLjQgMi4zLTIuMy4yLTMuMi0uOC0uMy0yLTEuNy0yLjUtMy4xLTEuMS0zLTMtMy4zLTMtLjUiLz48L3N2Zz4=)](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/memory-template-js)
 
-Producing structured results (e.g., to populate a database or spreadsheet) from open-ended research (e.g., web research) is a common use case that LLM-powered agents are well-suited to handle. Here, we provide a general template for this kind of "data enrichment agent" agent using [LangGraph](https://github.com/langchain-ai/langgraph) in [LangGraph Studio](https://github.com/langchain-ai/langgraph-studio). It contains an example graph exported from `src/enrichment_agent/graph.ts` that implements a research assistant capable of automatically gathering information on various topics from the web and structuring the results into a user-defined JSON format.
+## Motivation
 
-![Overview of agent](./static/overview.png)
+[Memory](https://langchain-ai.github.io/langgraph/concepts/memory/) allows your AI applications to learn from each user interaction. It enables them to become more effective as they adapt to users' personal preferences and even learn from prior mistakes. This template demonstrates how to build and deploy a long-term memory service that you can connect to from any LangGraph agent to manage user-scoped memories.
 
-![](/static/studio.png)
+![Motivation](./static/memory_motivation.png)
 
-# What it does
+## Quickstart
 
-The enrichment agent defined in `src/enrichment_agent/graph.ts` performs the following steps:
-
-1. Takes a research **topic** and requested **extractionSchema** as input.
-2. Searches the web for relevant information
-3. Reads and extracts key details from websites
-4. Organizes the findings into the requested structured format
-5. Validates the gathered information for completeness and accuracy
-
-![Graph view in LangGraph studio UI](./static/studio.png)
-
-## Getting Started
-
-You will need the latest versions of `@langchain/langgraph` and `@langchain/core`. See these instructions for help upgrading an [existing project](https://langchain-ai.github.io/langgraphjs/how-tos/manage-ecosystem-dependencies/).
-
-Assuming you have already [installed LangGraph Studio](https://github.com/langchain-ai/langgraph-studio?tab=readme-ov-file#download), to set up:
-
-1. Create a `.env` file.
+Create a `.env` file.
 
 ```bash
 cp .env.example .env
 ```
 
-2. Define required API keys in your `.env` file.
-
-The primary [search tool](./src/enrichment_agent/tools.ts) [^1] used is [Tavily](https://tavily.com/). Create an API key [here](https://app.tavily.com/sign-in).
+Set the required API keys in your `.env` file.
 
 <!--
 Setup instruction auto-generated by `langgraph template lock`. DO NOT EDIT MANUALLY.
 -->
 
-<details>
-<summary>Setup for `model`</summary>
-The `llm` configuration defaults are shown below:
+### Setup Model
+
+The defaults values for `model` are shown below:
 
 ```yaml
 model: anthropic/claude-3-5-sonnet-20240620
@@ -52,7 +34,7 @@ model: anthropic/claude-3-5-sonnet-20240620
 
 Follow the instructions below to get set up, or pick one of the additional options.
 
-### Anthropic Chat Models
+#### Anthropic
 
 To use Anthropic's chat models:
 
@@ -63,18 +45,7 @@ To use Anthropic's chat models:
 ANTHROPIC_API_KEY=your-api-key
 ```
 
-### Fireworks Chat Models
-
-To use Fireworks AI's chat models:
-
-1. Sign up for a [Fireworks AI account](https://app.fireworks.ai/signup) and obtain an API key.
-2. Add your Fireworks AI API key to your `.env` file:
-
-```
-FIREWORKS_API_KEY=your-api-key
-```
-
-#### OpenAI Chat Models
+#### OpenAI
 
 To use OpenAI's chat models:
 
@@ -85,119 +56,310 @@ To use OpenAI's chat models:
 OPENAI_API_KEY=your-api-key
 ```
 
-</details>
-
 <!--
 End setup instructions
 -->
 
-3. Consider a research topic and desired extraction schema.
+### Try it out
 
-As an example, here is a research topic we can consider:
+[Open this template](https://langgraph-studio.vercel.app/templates/open?githubUrl=https://github.com/langchain-ai/memory-template-js) in LangGraph studio to get started and navigate to the `chatbot` graph.
 
-```
-"Autonomous agents"
-```
+_If you want to deploy to the cloud, [follow these instructions to deploy this repository to LangGraph Cloud](https://langchain-ai.github.io/langgraph/cloud/) and use Studio in your browser._
 
-With an `extractionSchema` of:
+![Flow](./static/studio.png)
+
+Try chatting with the bot! It will attempt to save memories locally (on your desktop) based on the content you share. For example, if you say "Hi I'm Will and I like to hike.", it will consider that information worthy of remembering.
+
+If you pause the conversation for ~10-20 seconds, the long-term-memory graph will initiate. You can click the "Memories" button at the top of your studio (if you've updated your app to a recent version) to see what's been inferred.
+
+Create a _new_ thread using the `+` icon and chat with the bot again.
+
+The bot should now have access to the memories you've saved and will use them to personalize its responses.
+
+## How it works
+
+An effective memory service should address some key questions:
+
+1. When should memories be formed?
+2. What should each memory contain?
+3. How should memories be updated?
+
+The "correct" answer to these questions can be application-specific. We'll address these challenges below, and explain how this template lets you flexibly
+configure what and how memories are managed to keep your bot's memory on-topic and up-to-date. First, we'll discuss how you configure "what each memory should contain" using memory schemas.
+
+### When to save memories
+
+Our memory service uses **debouncing** to store information efficiently. Instead of processing memories every time the user messages your chat bot, which could be costly and redundant, we delay updates.
+
+Here's how debouncing works in this template:
+
+1. After each chatbot response, the graph schedules memory updates for a future time using the LangGraph SDK's `after_seconds` parameter.
+2. If the chatbot receives another message within this scheduled interval, the initial update is **cancelled.**
+3. A **new** memory update request is then scheduled based on the most recent interaction.
+
+This method processes memories after a period of inactivity, likely signaling the end of a conversation segment. It balances timely memory formation with computational efficiency, avoiding unnecessary processing during rapid exchanges.
+
+Debouncing allows us to maintain up-to-date memories without overwhelming our system or incurring excessive costs.
+
+See this in the code here: [chatbot/graph.ts](./src/chatbot/graph.ts).
+
+![DeBounce](./static/scheduling.png)
+
+### What to store in memories
+
+Next, we need to tell our system what information to track. Memory schemas tell the service the "shape" of individual memories and how to update them. You can define any custom memory schema by providing `memoryTypes` as configuration. Let's review the [two default schemas](./src/memory_graph/configuration.ts) we've provided along with the template to get a better sense of what they are doing.
+
+The first schema is the `User` profile schema, copied below:
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "facts": {
-      "type": "array",
-      "description": "An array of facts retrieved from the provided sources",
-      "items": {
-        "type": "string"
+  "name": "User",
+  "description": "Update this document to maintain up-to-date information about the user in the conversation.",
+  "updateMode": "patch",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "user_name": {
+        "type": "string",
+        "description": "The user's preferred name"
+      },
+      "age": {
+        "type": "integer",
+        "description": "The user's age"
+      },
+      "interests": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "A list of the user's interests"
+      },
+      "home": {
+        "type": "string",
+        "description": "Description of the user's home town/neighborhood, etc."
+      },
+      "occupation": {
+        "type": "string",
+        "description": "The user's current occupation or profession"
+      },
+      "conversation_preferences": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "A list of the user's preferred conversation styles, pronouns, topics they want to avoid, etc."
       }
     }
-  },
-  "required": ["facts"]
+  }
 }
 ```
 
-Another example topic with a more complex schema is:
+The schema has a name and description, as well as JSON schema parameters that are all passed to an LLM. The LLM infers the values for the schema based on the conversations you send to the memory service.
 
-```
-"Top 5 chip providers for LLM Training"
-```
+The schema also has an `updateMode` parameter that defines **how** the service should update its memory when new information is provided. The **patch** updateMode instructs the graph that we should always have a single JSON object to represent this user. We'll describe this in more detail in the [patch updates](#patch) section below.
 
-And here is a desired `extractionSchema`:
+The second memory schema we provide is the **Note** schema, shown below:
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "companies": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Company name"
-          },
-          "technologies": {
-            "type": "string",
-            "description": "Brief summary of key technologies used by the company"
-          },
-          "market_share": {
-            "type": "string",
-            "description": "Overview of market share for this company"
-          },
-          "future_outlook": {
-            "type": "string",
-            "description": "Brief summary of future prospects and developments in the field for this company"
-          },
-          "key_powers": {
-            "type": "string",
-            "description": "Which of the 7 Powers (Scale Economies, Network Economies, Counter Positioning, Switching Costs, Branding, Cornered Resource, Process Power) best describe this company's competitive advantage"
-          }
-        },
-        "required": ["name", "technologies", "market_share", "future_outlook"]
+  "name": "Note",
+  "description": "Save notable memories the user has shared with you for later recall.",
+  "updateMode": "insert",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "context": {
+        "type": "string",
+        "description": "The situation or circumstance in which the memory occurred that inform when it would be useful to recall this."
       },
-      "description": "List of companies"
-    }
-  },
-  "required": ["companies"]
+      "content": {
+        "type": "string",
+        "description": "The specific information, preference, or event being remembered."
+      }
+    },
+    "required": ["context", "content"]
+  }
 }
 ```
 
-4. Open the folder LangGraph Studio, and input `topic` and `extractionSchema`.
+Just like the previous example, this schema has a name, description, and parameters. Notice that the `updateMode` this time is "insert". This instructs the LLM in the memory service to **insert new memories to the list or update existing ones**. The number of memories for this `updateMode` is **unbound** since the model can continue to store new notes any time something interesting shows up in the conversation. Each time the service runs, the model can generate multiple schemas, some to update or re-contextualize existing memories, some to document new information. Note that these memory schemas tend to have fewer parameters and are usually most effective if you have a field to let the service provide contextual information (so that if your bot fetches this memory, it isn't taken out-of-context).
+
+To wrap up this section: `memory_schemas` provide a name, description, and parameters that the LLM populates to store in the database. The `updateMode` controls whether new information should always overwrite an existing memory or whether it should insert new memories (while optionally updating existing ones).
+
+These schemas are fully customizable! Try extending the above and seeing how it updates memory formation in the studio by passing in via configuration (or defining in an assistant).
+
+### Handling memory updates
+
+In the previous section, we showed how the memory schemas define how memories should be updated with new information over time. Let's now turn our attention to _how_ new information is handled. Each update type uses tool calling in slightly different ways. We will use tool calling to handle the cases below:
+
+#### patch
+
+The "patch" `updateMode` defines a memory management strategy that repeatedly updates a single JSON document. When new information is provided, the model generates "patches" - small updates to extend, delete, or replace content in the current memory document. This "patch" `updateMode` offers three key benefits:
+
+1. It provides strict visibility into a user's representation at any given point (seeing the memory is a single GET operation).
+2. It allows end users to directly view and update their own representation for the bot.
+3. It is easier to demarcate what should and shouldn't be persisted across conversations.
+
+By defining specific parameters in the schema, we deliberately choose what information is relevant to track, excluding other potentially distracting information. This approach biases the service to focus on what we deem important for our specific application.
+
+The memory update process works as follows:
+
+1. If no memory exists:
+
+   - we prompt the model to populate the document.
+   - It performs schema validation to ensure the output is correct.
+
+2. If a memory already exists:
+   - Instead of regenerating the entire schema (which can lead to information loss), we provide the LLM with a `PatchDoc` tool
+   - The memory schema is placed in the system prompt but is not made available as a tool for the model to call.
+   - Patches are applied to the existing memory, and the resulting document is validated to maintain schema compliance.
+
+By applying updates as JSON patches, we achieve several benefits:
+
+- Minimized information loss
+- Reduced token costs
+- Simplified memory management
+
+This approach is particularly effective for large, complicated schemas, where LLMs might otherwise forget or omit previously stored details when regenerating information from scratch.
+
+#### insert
+
+The "insert" `updateMode` lets you manage a growing collection of memories or notes, rather than a single, continuously updated document. This approach is particularly useful for tracking multiple, distinct pieces of information that accumulate over time, such as user preferences, important events, or contextual details that may be relevant in future interactions.
+
+When handling memory creation and updates with the "insert" mode, the process works as follows:
+
+1. When no memories exist:
+
+   - The model is provided with a single tool: the schema from your memory configuration.
+   - It uses multi-tool calling to generate zero or more instances of your schema, based on the conversation context.
+
+2. When memories exist for the user:
+   - The memory graph searches for existing memories to provide additional context.
+   - These existing memories are included in the system prompt.
+   - Two tools are made available to the model:
+     a. Your memory schema tool
+     b. A "PatchDoc" tool
+   - The LLM is prompted to invoke the appropriate tools based on the conversational context.
+   - The LLM can:
+     a. Call the PatchDoc tool to update existing memories that are incorrect or that can benefit from additional context.
+     b. Call your memory schema tool multiple times to save new memories or notes.
+   - All tool calls occur in a single generation step.
+   - The graph then upserts (inserts or updates) the results to the memory store.
+
+This approach allows for flexible memory management, enabling both updates to existing memories and the creation of new ones as needed.
 
 ## How to customize
 
-1. **Customize research targets**: Provide a custom JSON `extractionSchema` when calling the graph to gather different types of information.
-2. **Select a different model**: We default to anthropic (`claude-3-5-sonnet-20240620`). You can select a compatible chat model using `provider/model-name` via configuration. Example: `openai/gpt-4o-mini`.
-3. **Customize the prompt**: We provide a default prompt in [src/enrichment_agent/prompts.ts](./src/enrichment_agent/prompts.ts). You can easily update this via configuration.
+You can customize this memory graph in several ways:
 
-For quick prototyping, these configurations can be set in the studio UI.
+1. Customize memory schemas: The memory graph supports two different `updateMode` options that dictate how memories will be managed:
 
-![Config In Studio](./static/config.png)
+   a. Patch Schema: This allows updating a single, continuous memory schema with new information from the conversation. You can customize the schema for this type by defining the JSON schema when initializing the memory schema. For instance, try changing the "User" schema to add a new field `favorite_locations`:
 
-You can also quickly extend this template by:
+   ```json
+   [
+     {
+       "name": "User",
+       "description": "Update this document to maintain up-to-date information about the user in the conversation.",
+       "updateMode": "patch",
+       "parameters": {
+         "type": "object",
+         "properties": {
+           "user_name": {
+             "type": "string",
+             "description": "The user's preferred name"
+           },
+           "age": {
+             "type": "integer",
+             "description": "The user's age"
+           },
+           "interests": {
+             "type": "array",
+             "items": { "type": "string" },
+             "description": "A list of the user's interests"
+           },
+           "home": {
+             "type": "string",
+             "description": "Description of the user's home town/neighborhood, etc."
+           },
+           "occupation": {
+             "type": "string",
+             "description": "The user's current occupation or profession"
+           },
+           "conversation_preferences": {
+             "type": "array",
+             "items": { "type": "string" },
+             "description": "A list of the user's preferred conversation styles, pronouns, topics they want to avoid, etc."
+           },
+           "favorite_locations": {
+             "type": "array",
+             "items": { "type": "string" },
+             "description": "A list of the user's favorite places or locations"
+           }
+         }
+       }
+     }
+   ]
+   ```
 
-- Adding new tools and API connections in [src/enrichment_agent/tools.ts](./src/enrichment_agent/tools.ts). These are just any TypeScript functions.
-- Adding additional steps in [src/enrichment_agent/graph.ts](./src/enrichment_agent/graph.ts).
+   If you paste the above in the "Memory Types" configuration in the Studio UI and continue the chat, new memories will be extracted to follow the updated schema.
 
-## Development
+   b. Insertion Schema: This allows inserting individual "event" memories, such as key pieces of information or summaries from the conversation. You can define custom schemas for these event memories by providing a JSON schema when initializing the InsertionMemorySchema. Let's add a new insertion schema to track each "Person" the user mentions:
 
-While iterating on your graph, you can edit past state and rerun your app from past states to debug specific nodes. Local changes will be automatically applied via hot reload. Try adding an interrupt before the agent calls tools, updating the default system message in [src/enrichment_agent/utils.ts](./src/enrichment_agent/utils.ts) to take on a persona, or adding additional nodes and edges!
+   ```json
+   [
+     {
+       "name": "Person",
+       "description": "Track general information about people the user knows.",
+       "updateMode": "insert",
+       "parameters": {
+         "type": "object",
+         "properties": {
+           "name": {
+             "type": "string",
+             "description": "The name of the person."
+           },
+           "relationship": {
+             "type": "string",
+             "description": "The relationship between the user and this person (e.g., friend, family, colleague)."
+           },
+           "notes": {
+             "type": "string",
+             "description": "General notes about this person, including how they met, user's feelings, and recent interactions."
+           }
+         },
+         "required": ["name"]
+       }
+     }
+   ]
+   ```
 
-Follow up requests will be appended to the same thread. You can create an entirely new thread, clearing previous history, using the `+` button in the top right.
+   You can modify existing schemas or provide new ones via configuration to customize the memory structures extracted by the memory graph. Here's how it works:
 
-You can find the latest (under construction) docs on [LangGraph.js](https://langchain-ai.github.io/langgraphjs/) here, including examples and other references. Using those guides can help you pick the right patterns to adapt here for your use case.
+   - Memory schemas are grouped by "name".
+   - If you update an existing schema (e.g., "User"):
+     - It won't automatically update or migrate existing memories in the database.
+     - The new schema will be applied to all newly extracted memories.
+     - When updating existing memories, the LLM will validate and "migrate" the data based on the new schema while applying updates.
+   - If you create a new schema with a different name:
+     - It will be saved under a separate namespace.
+     - This ensures no collisions with existing memories.
 
-LangGraph Studio also integrates with [LangSmith](https://smith.langchain.com/) for more in-depth tracing and collaboration with teammates.
+2. Select a different model: We default to anthropic/claude-3-5-sonnet-20240620. You can select a compatible chat model using provider/model-name via configuration. Example: openai/gpt-4.
 
-[^1]: https://js.langchain.com/docs/concepts#tools
+3. Customize the prompts: We provide default prompts in the graph definition. You can easily update these via configuration.
+
+We'd also encourage you to extend this template by adding additional memory types! "Patch" and "insert" are incredibly powerful already, but you could also extend the logic to add more reflection over related memories to build stronger associations between the saved content. Make the code your own!
 
 <!--
 Configuration auto-generated by `langgraph template lock`. DO NOT EDIT MANUALLY.
 {
   "config_schemas": {
-    "agent": {
+    "chatbot": {
+      "type": "object",
+      "properties": {}
+    },
+    "memory_graph": {
       "type": "object",
       "properties": {
         "model": {
@@ -319,10 +481,7 @@ Configuration auto-generated by `langgraph template lock`. DO NOT EDIT MANUALLY.
             }
           ]
         }
-      },
-      "environment": [
-        "TAVILY_API_KEY"
-      ]
+      }
     }
   }
 }

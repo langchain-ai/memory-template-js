@@ -20,11 +20,11 @@ import {
 async function handlePatchMemory(
   state: typeof ProcessorAnnotation.State,
   config: LangGraphRunnableConfig,
-): Promise<Partial<typeof GraphAnnotation.State>> {
+) {
   const store = getStoreFromConfigOrThrow(config);
   const configurable = ensureConfiguration(config);
-  const namespace = [configurable.userId, "user_states", state.functionName];
-  const existingItem = await store.get(namespace, "memory");
+  const namespace = [configurable.userId, "user_states"];
+  const existingItem = await store.get(namespace, state.functionName);
   const existing = existingItem
     ? { [existingItem.key]: existingItem.value }
     : null;
@@ -51,22 +51,24 @@ async function handlePatchMemory(
     tool_choice: memoryConfig.tool.function.name,
   });
 
-  const preparedMessages = prepareMessages(
-    state.messages,
-    memoryConfig.systemPrompt,
+  const systemPrompt =
+    memoryConfig.systemPrompt + existing
+      ? `\n\nExisting items: ${JSON.stringify(existing, null, 2)}`
+      : "";
+
+  const result = await extractor.invoke(
+    prepareMessages(state.messages, systemPrompt),
+    config,
   );
-  const inputs = { messages: preparedMessages, existing };
-  const result = await extractor.invoke(inputs as any, config);
   const extracted = result.tool_calls?.[0].args ?? {};
 
-  await store.put(namespace, "memory", extracted);
-  return { messages: [] };
+  await store.put(namespace, state.functionName, extracted);
 }
 
 async function handleInsertionMemory(
   state: typeof ProcessorAnnotation.State,
   config: LangGraphRunnableConfig,
-): Promise<Partial<typeof GraphAnnotation.State>> {
+) {
   const store = getStoreFromConfigOrThrow(config);
   const configurable = ensureConfiguration(config);
   const namespace = [configurable.userId, "events", state.functionName];
@@ -107,8 +109,6 @@ async function handleInsertionMemory(
     store.put(namespace, uuidv4(), r.args),
   );
   storePromise ? await Promise.all(storePromise) : null;
-
-  return { messages: [] };
 }
 
 function scatterSchemas(
@@ -143,7 +143,7 @@ function scatterSchemas(
 }
 
 // Create the graph + all nodes
-const builder = new StateGraph(GraphAnnotation, ConfigurationAnnotation)
+export const builder = new StateGraph(GraphAnnotation, ConfigurationAnnotation)
   .addNode("handlePatchMemory", handlePatchMemory)
   .addNode("handleInsertionMemory", handleInsertionMemory)
   .addConditionalEdges(START, scatterSchemas, [
@@ -152,3 +152,4 @@ const builder = new StateGraph(GraphAnnotation, ConfigurationAnnotation)
   ]);
 
 export const graph = builder.compile();
+graph.name = "MemoryGraph";

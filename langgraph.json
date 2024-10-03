@@ -3,6 +3,7 @@
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
+    "chatbot": "./src/chatbot/graph.ts:graph",
     "memory_graph": "./src/memory_graph/graph.ts:graph"
   },
   "env": ".env"

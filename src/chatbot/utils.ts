@@ -1,21 +1,21 @@
 // Define utility functions for your graph.
 
-interface Memory {
-  value: any;
-  updated_at: string;
-}
+import { Item } from "@langchain/langgraph";
 
 /**
  * Format the user's memories.
  */
-export function formatMemories(memories: Memory[] | null | undefined): string {
+export function formatMemories(memories: Item[] | null | undefined): string {
   if (!memories || memories.length === 0) {
     return "";
   }
 
   // Note Bene: You can format better than this....
   const formattedMemories = memories
-    .map((m) => `${String(m.value)}\tLast updated: ${m.updated_at}`)
+    .map(
+      (m) =>
+        `${String(m.value)}\tLast updated: ${new Date(m.updatedAt).toDateString()}`,
+    )
     .join("\n");
 
   return `

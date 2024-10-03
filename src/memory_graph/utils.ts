@@ -31,7 +31,7 @@ export function prepareMessages(
   const sys: SystemMessage = new SystemMessage({
     content: `${systemPrompt}
 
-<memory-system>Reflect on following interaction. Use the provided tools to retain any necessary memories about the user.</memory-system>
+<memory-system>Reflect on following interaction. Use the provided tools to retain any necessary memories about the user. Use parallel/multi-tool calling to extract the appropriate number of memories if multiple are required.</memory-system>
 `,
   });
 

@@ -1,5 +1,4 @@
 import { Annotation, LangGraphRunnableConfig } from "@langchain/langgraph";
-import { SYSTEM_PROMPT } from "./prompts.js";
 
 type UpdateMode = "patch" | "insert";
 
@@ -9,6 +8,7 @@ interface MemoryConfig {
     function: {
       name: string;
       description: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       parameters: Record<string, any>;
     };
   };
@@ -21,33 +21,6 @@ export const ConfigurationAnnotation = Annotation.Root({
   model: Annotation<string>,
   memoryTypes: Annotation<MemoryConfig[]>,
 });
-
-export const ensureConfiguration = (
-  config: LangGraphRunnableConfig,
-): typeof ConfigurationAnnotation.State => {
-  const configurable = config?.configurable || {};
-  const values: typeof ConfigurationAnnotation.State = {
-    userId: configurable.userId || process.env.USER_ID,
-    model: configurable.model || process.env.MODEL,
-    memoryTypes: configurable.memoryTypes
-      ? configurable.memoryTypes.map(
-          (v: any): MemoryConfig => ({
-            tool: {
-              type: "function",
-              function: {
-                name: v.name,
-                description: v.description,
-                parameters: v.parameters,
-              },
-            },
-            systemPrompt: v.systemPrompt,
-            updateMode: v.updateMode,
-          }),
-        )
-      : DEFAULT_MEMORY_CONFIGS,
-  };
-  return values;
-};
 
 const DEFAULT_MEMORY_CONFIGS: MemoryConfig[] = [
   {
@@ -89,7 +62,7 @@ const DEFAULT_MEMORY_CONFIGS: MemoryConfig[] = [
         },
       },
     },
-    systemPrompt: SYSTEM_PROMPT,
+    systemPrompt: "",
     updateMode: "patch",
   },
   {
@@ -121,9 +94,40 @@ const DEFAULT_MEMORY_CONFIGS: MemoryConfig[] = [
         },
       },
     },
-    systemPrompt: SYSTEM_PROMPT,
+    systemPrompt: "",
     updateMode: "insert",
   },
 ];
+
+export const ensureConfiguration = (
+  config: LangGraphRunnableConfig,
+): typeof ConfigurationAnnotation.State => {
+  const configurable = config?.configurable || {};
+  const values: typeof ConfigurationAnnotation.State = {
+    userId: configurable.userId || process.env.USER_ID,
+    model:
+      configurable.model ||
+      process.env.MODEL ||
+      "anthropic/claude-3-5-sonnet-20240620",
+    memoryTypes: configurable.memoryTypes
+      ? configurable.memoryTypes.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (v: any): MemoryConfig => ({
+            tool: {
+              type: "function",
+              function: {
+                name: v?.name,
+                description: v?.description,
+                parameters: v?.parameters,
+              },
+            },
+            systemPrompt: v?.systemPrompt,
+            updateMode: v?.updateMode,
+          }),
+        )
+      : DEFAULT_MEMORY_CONFIGS,
+  };
+  return values;
+};
 
 export { type MemoryConfig, DEFAULT_MEMORY_CONFIGS };
